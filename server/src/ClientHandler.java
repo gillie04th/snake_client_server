@@ -1,9 +1,9 @@
-package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,11 +13,11 @@ public class ClientHandler extends Thread {
     DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
     final DataInputStream dis;
     final DataOutputStream dos;
-    final Socket s;
+    final Socket socket;
 
     // Constructor
-    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) {
-        this.s = s;
+    public ClientHandler(Socket socket, DataInputStream dis, DataOutputStream dos) {
+        this.socket = socket;
         this.dis = dis;
         this.dos = dos;
     }
@@ -28,53 +28,44 @@ public class ClientHandler extends Thread {
         String toreturn;
         while (true) {
             try {
-
-                // Ask user what he wants
-                dos.writeUTF("What do you want?[Date | Time]..\n" +
-                        "Type Exit to terminate connection.");
-
-                // receive the answer from client
+                // Réception de la commande du client
+                dos.writeUTF("Attente de commande ...");
                 received = dis.readUTF();
 
-                if (received.equals("Exit")) {
-                    System.out.println("Client " + this.s + " sends exit...");
-                    System.out.println("Closing this connection.");
-                    this.s.close();
-                    System.out.println("Connection closed");
+                if (received.equals("exit")) {
+                    System.out.println("Le client " + this.socket + " demande la fermeture de la connexion");
+                    System.out.println("Fermeture de la connexion sur le server");
+                    this.socket.close();
+                    System.out.println("Connexion terminée");
                     break;
                 }
 
-                // creating Date object
-                Date date = new Date();
-
-                // write on output stream based on the
-                // answer from the client
+                // Envoie de la réponse selon la commande du client
                 switch (received) {
-
-                    case "Date":
-                        toreturn = fordate.format(date);
+                    case "logout":
+                        toreturn = "logout";
                         dos.writeUTF(toreturn);
                         break;
-
-                    case "Time":
-                        toreturn = fortime.format(date);
+                    case "login":
+                        toreturn = "login";
                         dos.writeUTF(toreturn);
                         break;
-
                     default:
-                        dos.writeUTF("Invalid input");
+                        dos.writeUTF("Commande invalide");
                         break;
                 }
+            } catch (SocketException e) {
+                System.out.println("Connexion avec le client " + socket + " interrompue");
+                break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            // closing resources
+            // Fermeture des ressources
             this.dis.close();
             this.dos.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
