@@ -6,10 +6,13 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import agent.Snake;
 import factory.SnakeFactory;
 
 import item.Item;
+import model.User;
 import utils.AgentAction;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
@@ -76,6 +79,7 @@ public class SnakeGame extends Game {
 	public void takeTurn() {
 
 		HashMap<String,Object> command = new HashMap<String, Object>();
+		command.put("action","turn");
 		command.put("turn",Integer.toString(turn));
 		System.out.println(sendCommand(command));
 
@@ -411,10 +415,20 @@ public class SnakeGame extends Game {
 		HashMap<String, Object> res = sendCommand(params);
 
 		if(res.get("status_code").equals("200")){
-			this.user = (User) res.get("user");
+			this.user = (User) this.getMappedObject(res.get("user"), User.class);
 			return true;
 		} else 
 			return false;
+	}
+
+	private Object getMappedObject(Object object, Class objectClass){
+		try{
+			System.out.println();
+			return mapper.readValue(mapper.writeValueAsString(object),objectClass);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public boolean isUserLogged(){
