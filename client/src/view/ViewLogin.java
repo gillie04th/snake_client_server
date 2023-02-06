@@ -75,7 +75,7 @@ public class ViewLogin implements Observer {
 	public void update(Observable o, Object arg) {
 		Game game = (Game)o;
 		if(((SnakeGame)game).isUserLogged()){
-			//frame.setVisible(false);
+			frame.setVisible(false);
 			frame.dispose();
 		}
 	}

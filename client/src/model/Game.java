@@ -128,5 +128,4 @@ public abstract class Game extends Observable implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
 }

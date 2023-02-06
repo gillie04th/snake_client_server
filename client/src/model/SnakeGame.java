@@ -322,7 +322,6 @@ public class SnakeGame extends Game {
 				}
 			}
 		}
-
 	}
 
 	public void removeSnake() {
@@ -336,11 +335,8 @@ public class SnakeGame extends Game {
 			if (snake.isToRemove()) {
 
 				iterSnake.remove();
-
 			}
-
 		}
-
 	}
 
 	public void updateSnakeTimers() {
@@ -360,9 +356,7 @@ public class SnakeGame extends Game {
 
 				snake.setSickTimer(snake.getSickTimer() - 1);
 			}
-
 		}
-
 	}
 
 	public ArrayList<Item> getItems() {
@@ -373,7 +367,6 @@ public class SnakeGame extends Game {
 
 	public boolean[][] getWalls() {
 		return walls;
-
 	}
 
 	public AgentAction getInputMoveHuman1() {
@@ -416,12 +409,20 @@ public class SnakeGame extends Game {
 		params.put("password", password);
 		
 		HashMap<String, Object> res = sendCommand(params);
-		
-		return res.get("status_code") == "200";
+
+		if(res.get("status_code").equals("200")){
+			this.user = (User) res.get("user");
+			return true;
+		} else 
+			return false;
 	}
 
 	public boolean isUserLogged(){
-		return user.isLogged();
+		if(user != null){
+			return user.isLogged();
+		} else {
+			return false;
+		}
 	}
 
 	public InputMap getInputMap(){
