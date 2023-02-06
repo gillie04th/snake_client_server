@@ -50,6 +50,7 @@ public class ClientHandler extends Thread {
                         break;
                     case "login":
                         toreturn.put("login", "Vous êtes connecté");
+                        toreturn.put("status_code", "200");
                         dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
                         break;
                     default:
