@@ -1,0 +1,12 @@
+packages du client
+agent
+controller
+factory (recevoir les snakes du server)
+icons
+images
+item
+layouts
+model (passer les traitements de vérification sur le server)
+strategy (human)
+utils
+view

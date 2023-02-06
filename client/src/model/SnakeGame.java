@@ -1,7 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Random;
 
 import agent.Snake;
@@ -35,6 +37,8 @@ public class SnakeGame extends Game {
 	private int sizeX;
 	private int sizeY;
 
+	private User user;
+
 	public SnakeGame(int maxTurn, InputMap inputMap) {
 		super(maxTurn);
 		this.inputMap = inputMap;
@@ -58,8 +62,9 @@ public class SnakeGame extends Game {
 		snakes = new ArrayList<Snake>();
 		items = new ArrayList<Item>();
 
-		for (FeaturesSnake featuresSnake : start_snakes) {
-			snakes.add(snakeFactory.createSnake(featuresSnake, levelAISnake));
+		snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
+		for (int i = 1; i < start_snakes.size(); i++) {
+			snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
 		}
 
 		for (FeaturesItem featuresItem : start_items) {
@@ -70,7 +75,9 @@ public class SnakeGame extends Game {
 	@Override
 	public void takeTurn() {
 
-		System.out.println(sendCommand("turn " + turn));
+		HashMap<String,Object> command = new HashMap<String, Object>();
+		command.put("turn",Integer.toString(turn));
+		System.out.println(sendCommand(command));
 
 		ListIterator<Snake> iterSnakes = snakes.listIterator();
 
@@ -273,7 +280,7 @@ public class SnakeGame extends Game {
 
 	public void checkSnakeEaten() {
 
-		System.out.println("checkSnakeEaten");
+		//System.out.println("checkSnakeEaten");
 
 		for (Snake snake1 : snakes) {
 			if (snake1.getInvincibleTimer() < 1) {
@@ -315,7 +322,6 @@ public class SnakeGame extends Game {
 				}
 			}
 		}
-
 	}
 
 	public void removeSnake() {
@@ -329,11 +335,8 @@ public class SnakeGame extends Game {
 			if (snake.isToRemove()) {
 
 				iterSnake.remove();
-
 			}
-
 		}
-
 	}
 
 	public void updateSnakeTimers() {
@@ -353,9 +356,7 @@ public class SnakeGame extends Game {
 
 				snake.setSickTimer(snake.getSickTimer() - 1);
 			}
-
 		}
-
 	}
 
 	public ArrayList<Item> getItems() {
@@ -366,7 +367,6 @@ public class SnakeGame extends Game {
 
 	public boolean[][] getWalls() {
 		return walls;
-
 	}
 
 	public AgentAction getInputMoveHuman1() {
@@ -399,6 +399,34 @@ public class SnakeGame extends Game {
 
 	public void setSizeY(int sizeY) {
 		this.sizeY = sizeY;
+	}
+
+	public boolean login(String login, String password) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("action", "login");
+		params.put("login", login);
+		params.put("password", password);
+		
+		HashMap<String, Object> res = sendCommand(params);
+
+		if(res.get("status_code").equals("200")){
+			this.user = (User) res.get("user");
+			return true;
+		} else 
+			return false;
+	}
+
+	public boolean isUserLogged(){
+		if(user != null){
+			return user.isLogged();
+		} else {
+			return false;
+		}
+	}
+
+	public InputMap getInputMap(){
+		return this.inputMap;
 	}
 
 }
