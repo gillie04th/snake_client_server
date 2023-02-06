@@ -1,7 +1,8 @@
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,16 +19,16 @@ public class Server {
                 // Socket qui reçoit les requêtes des clients
                 socket = serverSocket.accept();
 
-                System.out.println("A new client is connected : " + socket);
+                System.out.println("Un nouveau client est connecté : " + socket);
 
                 // Déclaration des Input/Output Streams
-                DataInputStream dis = new DataInputStream(socket.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-                System.out.println("Assigning new thread for this client");
+                System.out.println("Un nouveau thread est assigné pour " + socket);
 
                 // Création d'un thread pour chaque client
-                Thread t = new ClientHandler(socket, dis, dos);
+                Thread t = new ClientHandler(socket, br, dos);
 
                 // Démarre le thread
                 t.start();
@@ -37,5 +38,6 @@ public class Server {
                 break;
             }
         }
+        serverSocket.close();
     }
 }
