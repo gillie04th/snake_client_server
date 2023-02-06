@@ -3,9 +3,14 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class Game extends Observable implements Runnable {
 
@@ -34,12 +39,11 @@ public abstract class Game extends Observable implements Runnable {
 	}
 
 	public void init() {
-
-		this.turn = 0;
-		isRunning = true;
-		initializeGame();
-		setChanged();
-		notifyObservers();
+			this.turn = 0;
+			isRunning = true;
+			initializeGame();
+			setChanged();
+			notifyObservers();
 	}
 
 	public void step() {
@@ -95,13 +99,13 @@ public abstract class Game extends Observable implements Runnable {
 		return turn;
 	}
 
-	public String sendCommand(String command){
+	public HashMap<String,Object> sendCommand(Map<String, Object> command){
 		try {
 			// Envoie d'un message au server
 			System.out.println(this.dis.readUTF());
-			this.dos.writeUTF("message exemple");
+			this.dos.writeUTF(new ObjectMapper().writeValueAsString(command));
 			// Retour du message server
-			return dis.readUTF();
+			return (HashMap<String,Object>) new ObjectMapper().readValue(dis.readUTF(), HashMap.class);
 		} catch (EOFException e) {
 			System.out.println("Le server est indisponible");
 			this.gameOver();

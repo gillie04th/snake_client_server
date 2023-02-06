@@ -4,35 +4,36 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ClientHandler extends Thread {
-    DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
-    DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
     final DataInputStream dis;
     final DataOutputStream dos;
     final Socket socket;
+    final ApiService apiService;
 
     // Constructor
     public ClientHandler(Socket socket, DataInputStream dis, DataOutputStream dos) {
         this.socket = socket;
         this.dis = dis;
         this.dos = dos;
+        this.apiService = new ApiService("http://localhost:8080/api");
     }
 
     @Override
     public void run() {
-        String received;
-        String toreturn;
+        HashMap<String, Object> received;
+        HashMap<String, Object> toreturn = new HashMap<String, Object>();
         while (true) {
             try {
                 // Réception de la commande du client
                 dos.writeUTF("Attente de commande ...");
-                received = dis.readUTF();
+                received = (HashMap<String, Object>) new ObjectMapper().readValue(dis.readUTF(),Object.class);
 
                 if (received.equals("exit")) {
+                    // TODO : Utilisation d'un token fourni pour chaque client pour l'identifier auprès de l'api une fois connecté
                     System.out.println("Le client " + this.socket + " demande la fermeture de la connexion");
                     System.out.println("Fermeture de la connexion sur le server");
                     this.socket.close();
@@ -41,19 +42,21 @@ public class ClientHandler extends Thread {
                 }
 
                 // Envoie de la réponse selon la commande du client
-                switch (received) {
+                System.out.println(received.get("action"));
+                switch ((String) received.get("action")) {
                     case "logout":
-                        toreturn = "logout";
-                        dos.writeUTF(toreturn);
+                        toreturn.put("logout", "Vous êtes déconnecté");
+                        dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
                         break;
                     case "login":
-                        toreturn = "login";
-                        dos.writeUTF(toreturn);
+                        toreturn.put("login", "Vous êtes connecté");
+                        dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
                         break;
                     default:
                         dos.writeUTF("Commande invalide");
                         break;
                 }
+
             } catch (SocketException e) {
                 System.out.println("Connexion avec le client " + socket + " interrompue");
                 break;
