@@ -1,5 +1,5 @@
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -8,18 +8,22 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import model.User;
+
 public class ClientHandler extends Thread {
-    final DataInputStream dis;
+    final BufferedReader br;
     final DataOutputStream dos;
     final Socket socket;
     final ApiService apiService;
+    final ObjectMapper mapper;
 
     // Constructor
-    public ClientHandler(Socket socket, DataInputStream dis, DataOutputStream dos) {
+    public ClientHandler(Socket socket, BufferedReader br, DataOutputStream dos) {
         this.socket = socket;
-        this.dis = dis;
+        this.br = br;
         this.dos = dos;
         this.apiService = new ApiService("http://localhost:8080/api");
+        this.mapper = new ObjectMapper();
     }
 
     @Override
@@ -29,8 +33,7 @@ public class ClientHandler extends Thread {
         while (true) {
             try {
                 // Réception de la commande du client
-                dos.writeUTF("Attente de commande ...");
-                received = (HashMap<String, Object>) new ObjectMapper().readValue(dis.readUTF(),Object.class);
+                received = (HashMap<String, Object>) mapper.readValue(br.readLine(),Object.class);
 
                 if (received.equals("exit")) {
                     // TODO : Utilisation d'un token fourni pour chaque client pour l'identifier auprès de l'api une fois connecté
@@ -46,16 +49,18 @@ public class ClientHandler extends Thread {
                 switch ((String) received.get("action")) {
                     case "logout":
                         toreturn.put("logout", "Vous êtes déconnecté");
-                        dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
+                        dos.writeUTF(mapper.writeValueAsString(toreturn));
                         break;
                     case "login":
-                        toreturn.put("login", "Vous êtes connecté");
+                        User user = new User("test", "test@test.fr", "test");
+                        toreturn.put("user", user);
                         toreturn.put("status_code", "200");
                         dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
 
 
                         LoginService.login(apiService, received);
 
+                        dos.writeUTF(mapper.writeValueAsString(toreturn));
                         break;
                     default:
                         dos.writeUTF("Commande invalide");
@@ -72,7 +77,7 @@ public class ClientHandler extends Thread {
 
         try {
             // Fermeture des ressources
-            this.dis.close();
+            this.br.close();
             this.dos.close();
         } catch (IOException e) {
             e.printStackTrace();
