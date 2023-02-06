@@ -52,6 +52,10 @@ public class ClientHandler extends Thread {
                         toreturn.put("login", "Vous êtes connecté");
                         toreturn.put("status_code", "200");
                         dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
+
+
+                        LoginService.login(apiService, received);
+
                         break;
                     default:
                         dos.writeUTF("Commande invalide");

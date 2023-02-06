@@ -29,9 +29,12 @@ public class ApiService {
         }
     }
 
-    public String post(String resource) {
+    public String post(String resource, String params) {
         try {
-            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url + resource)).POST(null).build();
+            HttpRequest request = HttpRequest.newBuilder()
+                                    .uri(new URI(url + resource))
+                                    .POST(HttpRequest.BodyPublishers.ofString(params))
+                                    .build();
             HttpResponse response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body().toString();
         } catch (URISyntaxException e) {
