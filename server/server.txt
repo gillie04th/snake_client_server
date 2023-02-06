@@ -1,0 +1,8 @@
+packages du client
+agent
+factory
+item
+layouts
+model
+strategy (ramdom / advanced)
+utils
