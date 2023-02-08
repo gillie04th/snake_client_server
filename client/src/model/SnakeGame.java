@@ -17,6 +17,7 @@ import utils.AgentAction;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
 import utils.ItemType;
+import utils.Message;
 import utils.Position;
 
 public class SnakeGame extends Game {
@@ -78,9 +79,8 @@ public class SnakeGame extends Game {
 	@Override
 	public void takeTurn() {
 
-		HashMap<String,Object> command = new HashMap<String, Object>();
-		command.put("action","turn");
-		command.put("turn",Integer.toString(turn));
+		Message command = new Message();
+		command.setAction("turn");
 		System.out.println(sendCommand(command));
 
 		ListIterator<Snake> iterSnakes = snakes.listIterator();
@@ -406,29 +406,19 @@ public class SnakeGame extends Game {
 	}
 
 	public boolean login(String login, String password) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Message message = new Message();
+		message.setAction("login");
+		message.setUser(new User(null, login, password));
 		
-		params.put("action", "login");
-		params.put("login", login);
-		params.put("password", password);
-		
-		HashMap<String, Object> res = sendCommand(params);
+		Message res = sendCommand(message);
 
-		if(res.get("status_code").equals("200")){
-			this.user = (User) this.getMappedObject(res.get("user"), User.class);
+		System.out.println(res.getUser().getName());
+
+		if(res.getStatusCode() == 200){
+			this.user = res.getUser();
 			return true;
 		} else 
 			return false;
-	}
-
-	private Object getMappedObject(Object object, Class objectClass){
-		try{
-			System.out.println();
-			return mapper.readValue(mapper.writeValueAsString(object),objectClass);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	public boolean isUserLogged(){

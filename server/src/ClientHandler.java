@@ -4,11 +4,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 
+import com.fasterxml.jackson.core.util.RequestPayload;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import model.User;
+import route.Router;
+import service.ApiService;
+import utils.Message;
 
 public class ClientHandler extends Thread {
     final BufferedReader br;
@@ -28,14 +31,19 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        HashMap<String, Object> received;
-        HashMap<String, Object> toreturn = new HashMap<String, Object>();
+        Message received;
         while (true) {
             try {
                 // Réception de la commande du client
-                received = (HashMap<String, Object>) mapper.readValue(br.readLine(),Object.class);
+                received = mapper.readValue(br.readLine(),Message.class);
 
-                if (received.equals("exit")) {
+                try{
+                    received.getAction();
+                }catch (NullPointerException e){
+                    received.setAction("noActionProvided");
+                }
+
+                if (received.getAction().equals("logout")) {
                     // TODO : Utilisation d'un token fourni pour chaque client pour l'identifier auprès de l'api une fois connecté
                     System.out.println("Le client " + this.socket + " demande la fermeture de la connexion");
                     System.out.println("Fermeture de la connexion sur le server");
@@ -43,28 +51,8 @@ public class ClientHandler extends Thread {
                     System.out.println("Connexion terminée");
                     break;
                 }
-
-                // Envoie de la réponse selon la commande du client
-                System.out.println(received.get("action"));
-                switch ((String) received.get("action")) {
-                    case "logout":
-                        toreturn.put("logout", "Vous êtes déconnecté");
-                        dos.writeUTF(mapper.writeValueAsString(toreturn));
-                        break;
-                    case "login":
-                        User user = new User("test", "test@test.fr", "test");
-                        toreturn.put("user", user);
-                        toreturn.put("status_code", "200");
-
-
-                        LoginService.login(apiService, received, mapper);
-
-                        dos.writeUTF(mapper.writeValueAsString(toreturn));
-                        break;
-                    default:
-                        dos.writeUTF("Commande invalide");
-                        break;
-                }
+                
+                dos.writeUTF(mapper.writeValueAsString(Router.route(apiService, received)));
 
             } catch (SocketException e) {
                 System.out.println("Connexion avec le client " + socket + " interrompue");
