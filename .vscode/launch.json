@@ -6,7 +6,7 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch Client",
+            "name": "Client",
             "request": "launch",
             "mainClass": "Test",
             "projectName": "snake_client_server_3e3f8804",
@@ -14,11 +14,18 @@
         },
         {
             "type": "java",
-            "name": "Launch Server",
+            "name": "Server",
             "request": "launch",
             "mainClass": "Server",
             "projectName": "snake_client_server_3e3f8804",
             "cwd": "${workspaceFolder}/server/src"
         }
-    ]
+    ],
+    "compounds": [
+        {
+          "name": "Server/Client",
+          "configurations": ["Server", "Client"],
+          "stopAll": true
+        }
+      ]
 }
