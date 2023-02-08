@@ -55,10 +55,9 @@ public class ClientHandler extends Thread {
                         User user = new User("test", "test@test.fr", "test");
                         toreturn.put("user", user);
                         toreturn.put("status_code", "200");
-                        dos.writeUTF(new ObjectMapper().writeValueAsString(toreturn));
 
 
-                        LoginService.login(apiService, received);
+                        LoginService.login(apiService, received, mapper);
 
                         dos.writeUTF(mapper.writeValueAsString(toreturn));
                         break;
