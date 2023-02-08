@@ -1,16 +1,17 @@
 package model;
 
 public class User {
-    protected boolean isLogged;
+    protected boolean logged;
     protected String name;
     protected String email;
     protected String password;
+
+    public User(){}
 
     public User(String name, String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
-        this.isLogged = true;
     }
 
     public String getName(){
@@ -26,7 +27,7 @@ public class User {
     }
 
     public boolean isLogged(){
-        return isLogged;
+        return logged;
     }
 
     public void setName(String name){
@@ -37,7 +38,7 @@ public class User {
         this.email = email;
     }
 
-    public void setIsLogged(boolean logged){
-        this.isLogged = logged;
+    public void setLogged(boolean logged){
+        this.logged = logged;
     }
 }

@@ -12,6 +12,8 @@ import java.util.Observable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import utils.Message;
+
 public abstract class Game extends Observable implements Runnable {
 
 	int turn;
@@ -101,12 +103,12 @@ public abstract class Game extends Observable implements Runnable {
 		return turn;
 	}
 
-	public HashMap<String,Object> sendCommand(Map<String, Object> command){
+	public Message sendCommand(Message command){
 		try {
 			// Envoie d'un message au server
 			this.out.println(mapper.writeValueAsString(command));
 			// Retour du message server
-			return (HashMap<String,Object>) mapper.readValue(in.readUTF(), HashMap.class);
+			return mapper.readValue(in.readUTF(), Message.class);
 		
 		} catch (EOFException e) {
 			System.out.println("Le server est ininponible");
