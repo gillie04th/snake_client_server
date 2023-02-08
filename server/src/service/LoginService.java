@@ -9,6 +9,7 @@ public class LoginService {
         apiService.get("/login", "");
         Message message = new Message();
         message.setUser(new User("test", "test@test.fr", "test"));
+        message.setStatusCode(200);
         return message;
     }
 
