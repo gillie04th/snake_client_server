@@ -412,8 +412,9 @@ public class SnakeGame extends Game {
 		
 		Message res = sendCommand(message);
 
+		System.out.println(res.getUser().getName());
+
 		if(res.getStatusCode() == 200){
-			System.out.println(res.getUser());
 			this.user = res.getUser();
 			return true;
 		} else 
