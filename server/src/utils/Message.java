@@ -1,5 +1,3 @@
-package utils;
-
 import javax.swing.InputMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
