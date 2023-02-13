@@ -14,4 +14,9 @@ public class StrategyHuman implements Strategy{
         return snakeGame.getInputMoveHuman1();
 
     }
+
+
+
+
+
 }
