@@ -6,7 +6,7 @@ import utils.Message;
 public class LoginService {
     
     public static Message login(ApiService apiService, Message data){
-        apiService.get("/login", "");
+        apiService.post("/login", data);
         Message message = new Message();
         message.setUser(new User("test", "test@test.fr", "test"));
         message.setStatusCode(200);
