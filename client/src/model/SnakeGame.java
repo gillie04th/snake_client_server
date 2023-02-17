@@ -35,6 +35,7 @@ public class SnakeGame extends Game {
 	private ArrayList<Item> items;
 
 	InputMap inputMap;
+	String layout;
 
 	private AgentAction inputMoveHuman1;
 
@@ -43,36 +44,37 @@ public class SnakeGame extends Game {
 
 	private User user;
 
-	public SnakeGame(int maxTurn, int serverPort, InputMap inputMap) {
+	public SnakeGame(int maxTurn, int serverPort, String layout) {
 		super(maxTurn, serverPort);
-		this.inputMap = inputMap;
+		this.layout = layout;
 		this.inputMoveHuman1 = AgentAction.MOVE_DOWN;
 	}
 
 	@Override
 	public void initializeGame() {
-
-		this.walls = inputMap.get_walls().clone();
-
-		String levelAISnake = "Advanced";
-		SnakeFactory snakeFactory = new SnakeFactory();
-
-		start_snakes = inputMap.getStart_snakes();
-		start_items = inputMap.getStart_items();
-
-		this.sizeX = inputMap.getSizeX();
-		this.sizeY = inputMap.getSizeY();
-
 		snakes = new ArrayList<Snake>();
 		items = new ArrayList<Item>();
 
-		snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
-		for (int i = 1; i < start_snakes.size(); i++) {
-			snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
-		}
+		if (buildGame()) {
 
-		for (FeaturesItem featuresItem : start_items) {
-			items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
+			this.walls = inputMap.get_walls().clone();
+
+			start_snakes = inputMap.getStart_snakes();
+			start_items = inputMap.getStart_items();
+			
+			this.sizeX = inputMap.getSizeX();
+			this.sizeY = inputMap.getSizeY();
+			
+			String levelAISnake = "Advanced";
+			SnakeFactory snakeFactory = new SnakeFactory();
+
+			snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
+			for (int i = 1; i < start_snakes.size(); i++) {
+				snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
+			}
+			for (FeaturesItem featuresItem : start_items) {
+				items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
+			}
 		}
 	}
 
@@ -284,7 +286,7 @@ public class SnakeGame extends Game {
 
 	public void checkSnakeEaten() {
 
-		//System.out.println("checkSnakeEaten");
+		// System.out.println("checkSnakeEaten");
 
 		for (Snake snake1 : snakes) {
 			if (snake1.getInvincibleTimer() < 1) {
@@ -409,28 +411,42 @@ public class SnakeGame extends Game {
 		Message message = new Message();
 		message.setAction("login");
 		message.setUser(new User(null, login, password));
-		
+
 		Message res = sendCommand(message);
 
 		System.out.println(res.getUser().getName());
 
-		if(res.getStatusCode() == 200){
+		if (res.getStatusCode() == 200) {
 			this.user = res.getUser();
 			return true;
-		} else 
+		} else
 			return false;
 	}
 
-	public boolean isUserLogged(){
-		if(user != null){
+	public boolean isUserLogged() {
+		if (user != null) {
 			return user.isLogged();
 		} else {
 			return false;
 		}
 	}
 
-	public InputMap getInputMap(){
+	public InputMap getInputMap() {
 		return this.inputMap;
+	}
+
+	public boolean buildGame() {
+		Message message = new Message();
+		message.setAction("buildGame");
+		message.setLayout(layout);
+
+		Message res = sendCommand(message);
+
+		if (res.getStatusCode() == 200) {
+			this.inputMap = res.getMap();
+			return true;
+		} else
+			return false;
 	}
 
 }

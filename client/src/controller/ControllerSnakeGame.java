@@ -17,14 +17,7 @@ public class ControllerSnakeGame extends AbstractController {
 		
 		String layoutName = "layouts/smallArena.lay";
 		
-		map = null;
-		try {
-			map = new InputMap(layoutName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		this.snakeGame = new SnakeGame(10000, 55555,map);
+		this.snakeGame = new SnakeGame(10000, 55555,layoutName);
 		this.snakeGame.serverConnection();
 		this.snakeGame.init();
 		
