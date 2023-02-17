@@ -24,7 +24,8 @@ public class ControllerSnakeGame extends AbstractController {
 			e.printStackTrace();
 		}
 		
-		this.snakeGame = new SnakeGame(10000, map);
+		this.snakeGame = new SnakeGame(10000, 55555,map);
+		this.snakeGame.serverConnection();
 		this.snakeGame.init();
 		
 		this.game = snakeGame;

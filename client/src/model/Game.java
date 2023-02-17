@@ -3,6 +3,7 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -10,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import utils.Message;
@@ -22,32 +25,49 @@ public abstract class Game extends Observable implements Runnable {
 	Thread thread;
 	long time = 100;
 	Socket socket;
+	int serverPort;
 	DataInputStream in;
 	PrintWriter out;
 	ObjectMapper mapper;
 
-	public Game(int maxTurn) {
+	public Game(int maxTurn, int serverPort) {
 		this.maxTurn = maxTurn;
+		this.mapper = new ObjectMapper();
+		this.serverPort = serverPort;
+	}
+
+	public void serverConnection() {
+		while (!openConnection()) {
+			try {
+				System.out.println("Connexion impossible, nouvel tentative dans 10 secondes ...");
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public boolean openConnection() {
+		// Déclaration des Input/Output Streams
 		try {
 			// Obtention ip local
 			InetAddress ip = InetAddress.getByName("localhost");
-			// Créationde la connexion au server sur le port 55555
-			this.socket = new Socket(ip, 55555);
-			// Déclaration des Input/Output Streams
+			// Créationde la connexion au server sur le port fourni
+			this.socket = new Socket(ip, serverPort);
 			this.in = new DataInputStream(this.socket.getInputStream());
 			this.out = new PrintWriter(this.socket.getOutputStream(), true);
-			this.mapper = new ObjectMapper();
-		} catch (Exception e) {
-			e.printStackTrace();
+			return true;
+		} catch (IOException e) {
+			return false;
 		}
 	}
 
 	public void init() {
-			this.turn = 0;
-			isRunning = true;
-			initializeGame();
-			setChanged();
-			notifyObservers();
+		this.turn = 0;
+		isRunning = true;
+		initializeGame();
+		setChanged();
+		notifyObservers();
 	}
 
 	public void step() {
@@ -103,21 +123,23 @@ public abstract class Game extends Observable implements Runnable {
 		return turn;
 	}
 
-	public Message sendCommand(Message command){
+	public Message sendCommand(Message command) {
+
 		try {
 			// Envoie d'un message au server
 			this.out.println(mapper.writeValueAsString(command));
 			// Retour du message server
 			return mapper.readValue(in.readUTF(), Message.class);
-		
-		} catch (EOFException e) {
-			System.out.println("Le server est ininponible");
-			this.gameOver();
-			return null;
-		} catch (Exception e) {
+		} catch (JsonMappingException e) {
 			e.printStackTrace();
-			return null;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Le serveur est indisponible");
+			serverConnection();
 		}
+
+		return null;
 	}
 
 	public void closeConnection() {
