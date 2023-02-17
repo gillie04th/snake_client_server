@@ -26,6 +26,7 @@ public class User {
     }
 
     public void setLogged(){}
+    public boolean isLogged(){ return true; }
     public void setPassword(){}
 
 }

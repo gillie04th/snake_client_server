@@ -43,8 +43,8 @@ public class SnakeGame extends Game {
 
 	private User user;
 
-	public SnakeGame(int maxTurn, InputMap inputMap) {
-		super(maxTurn);
+	public SnakeGame(int maxTurn, int serverPort, InputMap inputMap) {
+		super(maxTurn, serverPort);
 		this.inputMap = inputMap;
 		this.inputMoveHuman1 = AgentAction.MOVE_DOWN;
 	}
