@@ -40,9 +40,9 @@ public class ApiService {
         }
     }
 
-    public String post(String resource, Message data) {
+    public String post(String resource, String data) {
         try {
-            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url + resource)).POST(BodyPublishers.ofString("{\"email\":\"test\", \"password\":\"test\"}")).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url + resource)).POST(BodyPublishers.ofString(data)).build();
             HttpResponse response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             // URL url = new URL (this.url + resource);
@@ -66,9 +66,7 @@ public class ApiService {
             //     }
             //     System.out.println(response.toString());
             // }
-
-            System.out.println(response.body().toString());
-            return response.toString();
+            return response.body().toString();
         } catch (IOException e) {
             return e.getMessage();
         } catch (InterruptedException e) {

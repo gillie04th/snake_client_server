@@ -2,7 +2,6 @@ package factory;
 
 import java.util.ArrayList;
 
-
 import agent.Snake;
 import strategy.StrategyAdvanced;
 import strategy.StrategyHuman;
