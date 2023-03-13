@@ -35,7 +35,6 @@ public class SnakeGame extends Game {
 	private ArrayList<Item> items;
 
 	InputMap inputMap;
-	String layout;
 
 	private AgentAction inputMoveHuman1;
 
@@ -46,7 +45,11 @@ public class SnakeGame extends Game {
 
 	public SnakeGame(int maxTurn, int serverPort, String layout) {
 		super(maxTurn, serverPort);
-		this.layout = layout;
+		try {
+			this.inputMap = new InputMap(layout);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.inputMoveHuman1 = AgentAction.MOVE_DOWN;
 	}
 
@@ -55,26 +58,23 @@ public class SnakeGame extends Game {
 		snakes = new ArrayList<Snake>();
 		items = new ArrayList<Item>();
 
-		if (buildGame()) {
+		this.walls = inputMap.get_walls().clone();
 
-			this.walls = inputMap.get_walls().clone();
+		start_snakes = inputMap.getStart_snakes();
+		start_items = inputMap.getStart_items();
 
-			start_snakes = inputMap.getStart_snakes();
-			start_items = inputMap.getStart_items();
-			
-			this.sizeX = inputMap.getSizeX();
-			this.sizeY = inputMap.getSizeY();
-			
-			String levelAISnake = "Advanced";
-			SnakeFactory snakeFactory = new SnakeFactory();
+		this.sizeX = inputMap.getSizeX();
+		this.sizeY = inputMap.getSizeY();
 
-			snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
-			for (int i = 1; i < start_snakes.size(); i++) {
-				snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
-			}
-			for (FeaturesItem featuresItem : start_items) {
-				items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
-			}
+		String levelAISnake = "Advanced";
+		SnakeFactory snakeFactory = new SnakeFactory();
+
+		snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
+		for (int i = 1; i < start_snakes.size(); i++) {
+			snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
+		}
+		for (FeaturesItem featuresItem : start_items) {
+			items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
 		}
 	}
 
@@ -433,20 +433,6 @@ public class SnakeGame extends Game {
 
 	public InputMap getInputMap() {
 		return this.inputMap;
-	}
-
-	public boolean buildGame() {
-		Message message = new Message();
-		message.setAction("buildGame");
-		message.setLayout(layout);
-
-		Message res = sendCommand(message);
-
-		if (res.getStatusCode() == 200) {
-			this.inputMap = res.getMap();
-			return true;
-		} else
-			return false;
 	}
 
 }
