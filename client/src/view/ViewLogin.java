@@ -46,6 +46,7 @@ public class ViewLogin implements Observer {
 		// TextField Nom
 		tUsername = new JTextField();
 		tUsername.setBounds(100, 27, 193, 28);
+		tUsername.setText("test@test.fr");
 		panel.add(tUsername);
 		// Label Password
 		lPassword = new JLabel("Mot de passe");
@@ -54,6 +55,7 @@ public class ViewLogin implements Observer {
 		// TextField Password
 		tPassword = new JPasswordField();
 		tPassword.setBounds(100, 75, 193, 28);
+		tPassword.setText("testtest");
 		panel.add(tPassword);
 		// Bouton Submit
 		submit = new JButton("Submit");
