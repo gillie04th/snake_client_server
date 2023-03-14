@@ -29,6 +29,7 @@ public abstract class Game extends Observable implements Runnable {
 	DataInputStream in;
 	PrintWriter out;
 	ObjectMapper mapper;
+	String status;
 
 	public Game(int maxTurn, int serverPort) {
 		this.maxTurn = maxTurn;
@@ -76,6 +77,7 @@ public abstract class Game extends Observable implements Runnable {
 			takeTurn();
 		} else {
 			isRunning = false;
+			status = "Fin du temps imparti";
 			gameOver();
 		}
 		setChanged();
@@ -121,6 +123,10 @@ public abstract class Game extends Observable implements Runnable {
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public int getMaxTurn() {
+		return maxTurn;
 	}
 
 	public Message sendCommand(Message command) {
