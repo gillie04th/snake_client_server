@@ -1,18 +1,14 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Random;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import agent.Snake;
 import factory.SnakeFactory;
 
 import item.Item;
-import model.User;
+import strategy.StrategyHuman;
 import utils.AgentAction;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
@@ -83,7 +79,7 @@ public class SnakeGame extends Game {
 
 		Message command = new Message();
 		command.setAction("turn");
-		System.out.println(sendCommand(command));
+		sendCommand(command);
 
 		ListIterator<Snake> iterSnakes = snakes.listIterator();
 
@@ -156,7 +152,7 @@ public class SnakeGame extends Game {
 	@Override
 	public void gameOver() {
 		System.out.println("Game over");
-
+		saveScore(status);
 	}
 
 	public void addRandomApple() {
@@ -339,7 +335,9 @@ public class SnakeGame extends Game {
 			Snake snake = iterSnake.next();
 
 			if (snake.isToRemove()) {
-
+				if(snake.getStrategy().getClass() == StrategyHuman.class){
+					status = "élimination";
+				}
 				iterSnake.remove();
 			}
 		}
@@ -410,7 +408,7 @@ public class SnakeGame extends Game {
 	public boolean login(String login, String password) {
 		Message message = new Message();
 		message.setAction("login");
-		message.setUser(new User(null, login, password));
+		message.setUser(new User("", login, password));
 
 		Message res = sendCommand(message);
 
@@ -433,6 +431,28 @@ public class SnakeGame extends Game {
 
 	public InputMap getInputMap() {
 		return this.inputMap;
+	}
+
+	public String getStatus(){
+		return this.status;
+	}
+
+	public void saveScore(String endStatus){
+		Message message = new Message();
+		message.setAction("saveScore");
+		message.setUser(user);
+		message.setLayout(this.inputMap.getFilename());
+		message.setTurn(turn);
+		message.setMaxTurn(maxTurn);
+		message.setTime(time);
+		message.setMessage(endStatus);
+			
+		Message res = sendCommand(message);
+		if(res.getStatusCode() == 200){
+			System.out.println("partie enregistrée");
+		}
+
+		status = null;
 	}
 
 }
