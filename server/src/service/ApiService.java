@@ -40,9 +40,11 @@ public class ApiService {
         }
     }
 
+
     public String post(String resource, String data) {
         try {
             HttpRequest request = HttpRequest.newBuilder().uri(new URI(url + resource)).POST(BodyPublishers.ofString(data)).build();
+            
             HttpResponse response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             // URL url = new URL (this.url + resource);
