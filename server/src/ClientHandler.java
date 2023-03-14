@@ -23,7 +23,7 @@ public class ClientHandler extends Thread {
         this.socket = socket;
         this.br = br;
         this.dos = dos;
-        this.apiService = new ApiService("http://localhost:8080/api");
+        this.apiService = new ApiService("http://localhost:8080/snake/api");
         this.mapper = new ObjectMapper();
     }
 

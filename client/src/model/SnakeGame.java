@@ -1,18 +1,15 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Random;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import agent.Snake;
 import factory.SnakeFactory;
 
 import item.Item;
-import model.User;
+import strategy.StrategyHuman;
 import utils.AgentAction;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
@@ -43,19 +40,24 @@ public class SnakeGame extends Game {
 
 	private User user;
 
-	public SnakeGame(int maxTurn, InputMap inputMap) {
-		super(maxTurn);
-		this.inputMap = inputMap;
+	private String gameTimestamp;
+
+	public SnakeGame(int maxTurn, int serverPort, String layout) {
+		super(maxTurn, serverPort);
+		try {
+			this.inputMap = new InputMap(layout);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.inputMoveHuman1 = AgentAction.MOVE_DOWN;
 	}
 
 	@Override
 	public void initializeGame() {
+		snakes = new ArrayList<Snake>();
+		items = new ArrayList<Item>();
 
 		this.walls = inputMap.get_walls().clone();
-
-		String levelAISnake = "Advanced";
-		SnakeFactory snakeFactory = new SnakeFactory();
 
 		start_snakes = inputMap.getStart_snakes();
 		start_items = inputMap.getStart_items();
@@ -63,17 +65,18 @@ public class SnakeGame extends Game {
 		this.sizeX = inputMap.getSizeX();
 		this.sizeY = inputMap.getSizeY();
 
-		snakes = new ArrayList<Snake>();
-		items = new ArrayList<Item>();
+		String levelAISnake = "Advanced";
+		SnakeFactory snakeFactory = new SnakeFactory();
 
 		snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
 		for (int i = 1; i < start_snakes.size(); i++) {
 			snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
 		}
-
 		for (FeaturesItem featuresItem : start_items) {
 			items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
 		}
+
+		this.gameTimestamp = LocalDateTime.now().toString();
 	}
 
 	@Override
@@ -81,7 +84,7 @@ public class SnakeGame extends Game {
 
 		Message command = new Message();
 		command.setAction("turn");
-		System.out.println(sendCommand(command));
+		sendCommand(command);
 
 		ListIterator<Snake> iterSnakes = snakes.listIterator();
 
@@ -154,7 +157,7 @@ public class SnakeGame extends Game {
 	@Override
 	public void gameOver() {
 		System.out.println("Game over");
-
+		saveScore(status);
 	}
 
 	public void addRandomApple() {
@@ -284,7 +287,7 @@ public class SnakeGame extends Game {
 
 	public void checkSnakeEaten() {
 
-		//System.out.println("checkSnakeEaten");
+		// System.out.println("checkSnakeEaten");
 
 		for (Snake snake1 : snakes) {
 			if (snake1.getInvincibleTimer() < 1) {
@@ -337,7 +340,9 @@ public class SnakeGame extends Game {
 			Snake snake = iterSnake.next();
 
 			if (snake.isToRemove()) {
-
+				if(snake.getStrategy().getClass() == StrategyHuman.class){
+					status = "élimination";
+				}
 				iterSnake.remove();
 			}
 		}
@@ -408,29 +413,52 @@ public class SnakeGame extends Game {
 	public boolean login(String login, String password) {
 		Message message = new Message();
 		message.setAction("login");
-		message.setUser(new User(null, login, password));
-		
+		message.setUser(new User("", login, password));
+
 		Message res = sendCommand(message);
 
 		System.out.println(res.getUser().getName());
 
-		if(res.getStatusCode() == 200){
+		if (res.getStatusCode() == 200) {
 			this.user = res.getUser();
+			this.user.setLogged(true);
+			notifyObservers();
 			return true;
-		} else 
+		} else
 			return false;
 	}
 
-	public boolean isUserLogged(){
-		if(user != null){
+	public boolean isUserLogged() {
+		if (user != null) {
 			return user.isLogged();
 		} else {
 			return false;
 		}
 	}
 
-	public InputMap getInputMap(){
+	public InputMap getInputMap() {
 		return this.inputMap;
+	}
+
+	public String getStatus(){
+		return this.status;
+	}
+
+	public void saveScore(String endStatus){
+		Message message = new Message();
+		message.setAction("saveScore");
+		message.setUser(user);
+		message.setLayout(this.inputMap.getFilename());
+		message.setTurn(turn);
+		message.setMaxTurn(maxTurn);
+		message.setTime(time);
+		message.setMessage(endStatus);
+		message.setTimestamp(gameTimestamp);
+			
+		Message res = sendCommand(message);
+		if(res.getStatusCode() == 200){
+			System.out.println("partie enregistrée");
+		}
 	}
 
 }

@@ -15,16 +15,10 @@ public class ControllerSnakeGame extends AbstractController {
 	
 	public ControllerSnakeGame() {
 		
-		String layoutName = "layouts/smallArena.lay";
+		String layoutName = "layouts/smallNoWall.lay";
 		
-		map = null;
-		try {
-			map = new InputMap(layoutName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		this.snakeGame = new SnakeGame(10000, map);
+		this.snakeGame = new SnakeGame(20, 55555,layoutName);
+		this.snakeGame.serverConnection();
 		this.snakeGame.init();
 		
 		this.game = snakeGame;
@@ -47,9 +41,18 @@ public class ControllerSnakeGame extends AbstractController {
 	public void goRight(){
 		this.snakeGame.setInputMoveHuman1(AgentAction.MOVE_RIGHT);
 	}
-
+é
 	public void closeGame(){
 		this.snakeGame.closeConnection();
+	}
+
+	@Override
+	public void restart() {
+		this.game.pause();
+		if(this.snakeGame.getTurn() < this.snakeGame.getMaxTurn()){
+			this.snakeGame.saveScore("restart");
+		}
+		this.game.init();
 	}
 
 	public void login(String login, String password){

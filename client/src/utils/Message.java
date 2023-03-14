@@ -1,6 +1,6 @@
 package utils;
 
-import javax.swing.InputMap;
+import model.InputMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +16,11 @@ public class Message {
     private int statusCode;
     private String message;
     private String action;
+    private String layout;
+    private int turn;
+    private int maxTurn;
+    private long time;
+    private String timestamp;
 
     public Message(){}
 
@@ -73,6 +78,45 @@ public class Message {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getLayout() {
+        return this.layout;
+    }
+
+    public void setLayout(String layout) {
+        this.layout = layout;
+    }
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public int getMaxTurn() {
+        return this.maxTurn;
+    }
+
+    public void setMaxTurn(int maxTurn) {
+        this.maxTurn = maxTurn;
+    }
+
+    public long getTime() {
+        return this.time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public String getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
     
     public String toJson(){
