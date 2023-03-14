@@ -41,7 +41,7 @@ public class ControllerSnakeGame extends AbstractController {
 	public void goRight(){
 		this.snakeGame.setInputMoveHuman1(AgentAction.MOVE_RIGHT);
 	}
-
+é
 	public void closeGame(){
 		this.snakeGame.closeConnection();
 	}
@@ -49,7 +49,7 @@ public class ControllerSnakeGame extends AbstractController {
 	@Override
 	public void restart() {
 		this.game.pause();
-		if(this.snakeGame.getStatus() == null){
+		if(this.snakeGame.getTurn() < this.snakeGame.getMaxTurn()){
 			this.snakeGame.saveScore("restart");
 		}
 		this.game.init();

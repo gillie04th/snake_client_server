@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
@@ -39,6 +40,8 @@ public class SnakeGame extends Game {
 
 	private User user;
 
+	private String gameTimestamp;
+
 	public SnakeGame(int maxTurn, int serverPort, String layout) {
 		super(maxTurn, serverPort);
 		try {
@@ -72,6 +75,8 @@ public class SnakeGame extends Game {
 		for (FeaturesItem featuresItem : start_items) {
 			items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
 		}
+
+		this.gameTimestamp = LocalDateTime.now().toString();
 	}
 
 	@Override
@@ -416,6 +421,8 @@ public class SnakeGame extends Game {
 
 		if (res.getStatusCode() == 200) {
 			this.user = res.getUser();
+			this.user.setLogged(true);
+			notifyObservers();
 			return true;
 		} else
 			return false;
@@ -446,13 +453,12 @@ public class SnakeGame extends Game {
 		message.setMaxTurn(maxTurn);
 		message.setTime(time);
 		message.setMessage(endStatus);
+		message.setTimestamp(gameTimestamp);
 			
 		Message res = sendCommand(message);
 		if(res.getStatusCode() == 200){
 			System.out.println("partie enregistrée");
 		}
-
-		status = null;
 	}
 
 }

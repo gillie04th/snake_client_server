@@ -125,6 +125,10 @@ public abstract class Game extends Observable implements Runnable {
 		return turn;
 	}
 
+	public int getMaxTurn() {
+		return maxTurn;
+	}
+
 	public Message sendCommand(Message command) {
 
 		try {

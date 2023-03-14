@@ -20,6 +20,7 @@ public class Message {
     private int turn;
     private int maxTurn;
     private long time;
+    private String timestamp;
 
     public Message(){}
 
@@ -86,7 +87,6 @@ public class Message {
     public void setLayout(String layout) {
         this.layout = layout;
     }
-
     public int getTurn() {
         return this.turn;
     }
@@ -109,6 +109,14 @@ public class Message {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
     
     public String toJson(){
