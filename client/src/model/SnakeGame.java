@@ -87,6 +87,7 @@ public class SnakeGame extends Game {
 
 		Message command = new Message();
 		command.setAction("turn");
+		command.setUser(user);
 
 		ListIterator<Snake> iterSnakes = snakes.listIterator();
 
@@ -105,6 +106,7 @@ public class SnakeGame extends Game {
 		command.setMap(inputMap);
 		command.setSnakes(snakes);
 		command.setItems(items);
+		command.setUser(user);
 
 		Message res = sendCommand(command);
 
@@ -112,7 +114,6 @@ public class SnakeGame extends Game {
 		items = res.getItems();
 
 		for(Snake snake : snakes){
-			System.out.println(snake.getId());
 			if(snake.getId() == 0){
 				snake.setStrategy(new StrategyHuman());
 			}else{

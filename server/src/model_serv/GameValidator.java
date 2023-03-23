@@ -5,6 +5,7 @@ import java.util.ListIterator;
 import java.util.Random;
 
 import agent_serv.Snake;
+import exceptions.UserNotLoggedException;
 import item_serv.Item;
 import utils_serv.AgentAction;
 import utils_serv.ItemType;
@@ -22,6 +23,7 @@ public class GameValidator {
 	ArrayList<Snake> snakes;
 	ArrayList<Item> items;
 	InputMap map;
+	User user;
 
 	public GameValidator(Message data) {
 		this.snake = data.getSnake();
@@ -29,6 +31,7 @@ public class GameValidator {
 		this.items = data.getItems();
 		this.map = data.getMap();
 		this.action = data.getSnakeMove();
+		this.user = data.getUser();
 	}
 
 	public boolean isLegalMove() {
@@ -218,5 +221,15 @@ public class GameValidator {
 		result.setItems(items);
 
 		return result;
+	}
+
+	public void isAuthenticated() throws UserNotLoggedException {
+		if(user != null){
+			if(!user.getToken().equals("token_api")){
+				throw new UserNotLoggedException("Le token fourni n'est pas autorisé");
+			}
+		} else {
+			throw new UserNotLoggedException("Aucun utilisateur fourni");
+		}
 	}
 }
