@@ -10,6 +10,7 @@ import item.Item;
 import strategy.StrategyHuman;
 import strategy.StrategyRandom;
 import utils.AgentAction;
+import utils.ColorSnake;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
 import utils.ItemType;
@@ -69,9 +70,9 @@ public class SnakeGame extends Game {
 		SnakeFactory snakeFactory = new SnakeFactory();
 
 		for (int i = 0; i < start_snakes.size(); i++) {
-			if(i == 0){
+			if (i == 0) {
 				snakes.add(snakeFactory.createSnake(start_snakes.get(0), "Human"));
-			}else{
+			} else {
 				snakes.add(snakeFactory.createSnake(start_snakes.get(i), levelAISnake));
 			}
 		}
@@ -96,7 +97,7 @@ public class SnakeGame extends Game {
 			AgentAction agentAction = snake.play(this);
 			command.setSnakeMove(agentAction);
 			command.setSnake(snake);
-			
+
 			Message res = sendCommand(command);
 			snake.move(res.getSnakeMove(), this);
 		}
@@ -113,10 +114,10 @@ public class SnakeGame extends Game {
 		snakes = res.getSnakes();
 		items = res.getItems();
 
-		for(Snake snake : snakes){
-			if(snake.getId() == 0){
+		for (Snake snake : snakes) {
+			if (snake.getId() == 0) {
 				snake.setStrategy(new StrategyHuman());
-			}else{
+			} else {
 				snake.setStrategy(new StrategyRandom());
 			}
 		}
@@ -191,6 +192,7 @@ public class SnakeGame extends Game {
 		if (res.getStatusCode() == 200) {
 			this.user = res.getUser();
 			this.user.setLogged(true);
+			snakes.get(0).setSkin(this.user.getSkin());
 			notifyObservers();
 			return true;
 		} else
@@ -209,11 +211,11 @@ public class SnakeGame extends Game {
 		return this.inputMap;
 	}
 
-	public String getStatus(){
+	public String getStatus() {
 		return this.status;
 	}
 
-	public void saveScore(String endStatus){
+	public void saveScore(String endStatus) {
 		Message message = new Message();
 		message.setAction("saveScore");
 		message.setUser(user);
@@ -223,9 +225,9 @@ public class SnakeGame extends Game {
 		message.setTime(time);
 		message.setMessage(endStatus);
 		message.setTimestamp(gameTimestamp);
-			
+
 		Message res = sendCommand(message);
-		if(res.getStatusCode() == 200){
+		if (res.getStatusCode() == 200) {
 			System.out.println("partie enregistrée");
 		}
 	}
