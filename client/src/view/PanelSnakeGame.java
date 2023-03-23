@@ -13,6 +13,12 @@ import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import utils.AgentAction;
+import utils.ColorSnake;
+import utils.FeaturesItem;
+import utils.FeaturesSnake;
+import utils.ItemType;
+import utils.Position;
 import utils.*;
 
 

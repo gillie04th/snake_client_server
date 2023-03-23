@@ -9,6 +9,7 @@ public class Item {
 	
 	private ItemType itemType;
 	
+	public Item(){}
 	
 	public Item(int x, int y, ItemType itemType) {
 		

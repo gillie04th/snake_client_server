@@ -1,7 +1,7 @@
 package controller;
 
-import model.InputMap;
 import model.SnakeGame;
+import model.InputMap;
 import utils.AgentAction;
 import view.PanelSnakeGame;
 import view.ViewSnakeGame;
@@ -17,7 +17,7 @@ public class ControllerSnakeGame extends AbstractController {
 		
 		String layoutName = "layouts/smallNoWall.lay";
 		
-		this.snakeGame = new SnakeGame(20, 55555,layoutName);
+		this.snakeGame = new SnakeGame(100, 55555,layoutName);
 		this.snakeGame.serverConnection();
 		this.snakeGame.init();
 		
@@ -41,7 +41,7 @@ public class ControllerSnakeGame extends AbstractController {
 	public void goRight(){
 		this.snakeGame.setInputMoveHuman1(AgentAction.MOVE_RIGHT);
 	}
-é
+
 	public void closeGame(){
 		this.snakeGame.closeConnection();
 	}

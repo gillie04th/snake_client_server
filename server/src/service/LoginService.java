@@ -4,16 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.User;
-import utils.Message;
+import model_serv.User;
+import utils_serv.Message;
 
-public class LoginService {
+public class LoginService extends AbstractService{
     
     public static Message login(ApiService apiService, Message data){
         String result = apiService.post("/login", "{ \"email\": \"" + data.getUser().getEmail() + "\", \"password\":\"" + data.getUser().getPassword() + "\"}");
         Message message = new Message();
         try {
-            ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             message = mapper.readValue(result, Message.class);
         } catch (JsonProcessingException e) {
