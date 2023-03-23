@@ -2,9 +2,7 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model_serv.User;
 import utils_serv.Message;
 
 public class LoginService extends AbstractService{
@@ -15,10 +13,11 @@ public class LoginService extends AbstractService{
         try {
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             message = mapper.readValue(result, Message.class);
+            message.setStatusCode(200);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            message.setStatusCode(400);
+            message.setMessage("Erreur des données fournies");
         }
-        message.setStatusCode(200);
         return message;
     }
 
