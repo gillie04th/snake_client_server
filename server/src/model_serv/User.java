@@ -6,6 +6,7 @@ public class User {
     protected String email;
     protected String password;
     protected String token;
+    protected String skin;
 
     public User(){}
 
@@ -59,4 +60,11 @@ public class User {
         this.token = token;
     }
 
+    public String getSkin() {
+        return this.skin;
+    }
+
+    public void setSkin(String skin) {
+        this.skin = skin;
+    }
 }
