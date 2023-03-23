@@ -1,10 +1,11 @@
-package model;
+package model_serv;
 
 public class User {
     protected boolean logged;
     protected String name;
     protected String email;
     protected String password;
+    protected String token;
 
     public User(){}
 
@@ -41,4 +42,21 @@ public class User {
     public void setLogged(boolean logged){
         this.logged = logged;
     }
+
+    public boolean getLogged() {
+        return this.logged;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 }

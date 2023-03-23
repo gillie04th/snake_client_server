@@ -5,6 +5,7 @@ public class Position {
 	private int x;
 	private int y;
 
+	public Position(){}
 
 	public Position(int x, int y) {
 		

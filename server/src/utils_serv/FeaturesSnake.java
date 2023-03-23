@@ -1,6 +1,10 @@
-package utils;
+package utils_serv;
 
 import java.util.ArrayList;
+
+import utils_serv.AgentAction;
+import utils_serv.ColorSnake;
+import utils_serv.Position;
 
 
 public class FeaturesSnake {
@@ -16,6 +20,8 @@ public class FeaturesSnake {
 	boolean isInvincible;
 	boolean isSick;
 	
+	public FeaturesSnake(){}
+
 	public FeaturesSnake(ArrayList<Position> positions, AgentAction lastAction, ColorSnake colorSnake, boolean isInvincible, boolean isSick) {
 		
 		this.positions = positions;

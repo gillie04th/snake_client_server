@@ -1,16 +1,17 @@
 package utils;
 
-import model.InputMap;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import agent.Snake;
+import item.Item;
+import model.InputMap;
 import model.User;
 
 public class Message {
     
-    private FeaturesItem fi;
-    private FeaturesSnake fs;
     private InputMap map;
     private User user;
     private int statusCode;
@@ -21,24 +22,12 @@ public class Message {
     private int maxTurn;
     private long time;
     private String timestamp;
+    private Snake snake;
+    private ArrayList<Snake> snakes;
+    private ArrayList<Item> items;
+    private AgentAction snakeMove;
 
     public Message(){}
-
-    public FeaturesItem getFi() {
-        return this.fi;
-    }
-
-    public void setFi(FeaturesItem fi) {
-        this.fi = fi;
-    }
-
-    public FeaturesSnake getFs() {
-        return this.fs;
-    }
-
-    public void setFs(FeaturesSnake fs) {
-        this.fs = fs;
-    }
 
     public InputMap getMap() {
         return this.map;
@@ -117,6 +106,38 @@ public class Message {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Snake getSnake() {
+        return this.snake;
+    }
+
+    public void setSnake(Snake snake) {
+        this.snake = snake;
+    }
+
+    public AgentAction getSnakeMove() {
+        return this.snakeMove;
+    }
+
+    public void setSnakeMove(AgentAction snakeMove) {
+        this.snakeMove = snakeMove;
+    }
+
+    public ArrayList<Snake> getSnakes() {
+        return this.snakes;
+    }
+
+    public void setSnakes(ArrayList<Snake> snakes) {
+        this.snakes = snakes;
+    }
+
+    public ArrayList<Item> getItems() {
+        return this.items;
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
     }
     
     public String toJson(){

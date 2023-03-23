@@ -2,6 +2,10 @@ package utils;
 
 import java.util.ArrayList;
 
+import utils.AgentAction;
+import utils.ColorSnake;
+import utils.Position;
+
 
 public class FeaturesSnake {
 

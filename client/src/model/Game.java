@@ -12,8 +12,10 @@ import java.util.Map;
 import java.util.Observable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import utils.Message;
 
@@ -132,6 +134,8 @@ public abstract class Game extends Observable implements Runnable {
 	public Message sendCommand(Message command) {
 
 		try {
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			// Envoie d'un message au server
 			this.out.println(mapper.writeValueAsString(command));
 			// Retour du message server

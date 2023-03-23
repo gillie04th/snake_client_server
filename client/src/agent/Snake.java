@@ -10,12 +10,9 @@ import utils.Position;
 
 public class Snake {
 
-
-
 	ArrayList<Position> positions;
 
 	private AgentAction lastAction;
-
 
 	private int invincibleTimer;
 	private int sickTimer;
@@ -32,6 +29,7 @@ public class Snake {
 	
 	ColorSnake colorSnake;
 
+	public Snake(){}
 
 	public Snake(Position position, AgentAction lastAction,  int id, ColorSnake colorSnake) {
 

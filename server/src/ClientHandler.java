@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import route.Router;
 import service.ApiService;
-import utils.Message;
+import utils_serv.Message;
 
 public class ClientHandler extends Thread {
     final BufferedReader br;
@@ -25,6 +26,7 @@ public class ClientHandler extends Thread {
         this.dos = dos;
         this.apiService = new ApiService("http://localhost:8080/snake/api");
         this.mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override

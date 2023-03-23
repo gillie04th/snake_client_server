@@ -1,4 +1,4 @@
-package model;
+package model_serv;
 
 
 import java.io.BufferedReader;
@@ -9,12 +9,12 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 
-import utils.AgentAction;
-import utils.ColorSnake;
-import utils.FeaturesItem;
-import utils.FeaturesSnake;
-import utils.ItemType;
-import utils.Position;
+import utils_serv.AgentAction;
+import utils_serv.ColorSnake;
+import utils_serv.FeaturesItem;
+import utils_serv.FeaturesSnake;
+import utils_serv.ItemType;
+import utils_serv.Position;
 
 
 
@@ -37,7 +37,8 @@ public class InputMap implements Serializable {
 	private BufferedReader buffer;
 	
 	ColorSnake[] colorSnake = {ColorSnake.Green,ColorSnake.Red};
-	
+
+	public InputMap(){}
 
 	public InputMap(String filename) throws Exception{
 		
@@ -153,9 +154,9 @@ public class InputMap implements Serializable {
 	
 	public int getSizeX() {return(size_x);}
 	public int getSizeY() {return(size_y);}
-	
 
-
+	public void setSizeX(int size_x) {this.size_x = size_x;}
+	public void setSizeY(int size_y) {this.size_y = size_y;}
 	
 	public String getFilename(){
 		return filename;
@@ -163,6 +164,10 @@ public class InputMap implements Serializable {
 
 	public boolean[][] get_walls() {
 		return walls;
+	}
+
+	public void set_walls(boolean[][] walls) {
+		this.walls = walls;
 	}
 	
 	

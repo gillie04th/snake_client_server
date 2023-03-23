@@ -10,9 +10,9 @@ import java.util.Observer;
 
 import javax.swing.JFrame;
 
-import agent.Snake;
 import controller.ControllerSnakeGame;
 import item.Item;
+import agent.Snake;
 import model.SnakeGame;
 import utils.FeaturesItem;
 import utils.FeaturesSnake;
