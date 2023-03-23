@@ -24,8 +24,8 @@ public class MainFrame extends JFrame implements KeyListener{
     public void keyPressed(KeyEvent e) {
 
         System.out.println("Key pressed");
-        System.out.println("this.controller");
-        System.out.println(this.controller);
+        // System.out.println("this.controller");
+        // System.out.println(this.controller);
 
         if(e.getKeyCode()== KeyEvent.VK_RIGHT)
             this.controller.goRight();

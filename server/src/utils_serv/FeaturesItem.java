@@ -1,24 +1,29 @@
-package item;
+package utils_serv;
 
-import utils.ItemType;
+import utils_serv.ItemType;
 
-public class Item {
+public class FeaturesItem {
 
+	
 	private int x;
 	private int y;
-	
 	private ItemType itemType;
 	
+
+	public FeaturesItem(){}
+
+
+	public FeaturesItem(int x, int y, ItemType itemType) {
+		
+		this.x = x;
+		this.y = y;
+		this.itemType = itemType;
 	
-	public Item(int x, int y, ItemType itemType) {
-		
-		this.setX(x);
-		this.setY(y);
-		this.setItemType(itemType);
-		
 	}
-
-
+	
+	
+	
+	
 	public int getX() {
 		return x;
 	}
@@ -47,5 +52,8 @@ public class Item {
 	public void setItemType(ItemType itemType) {
 		this.itemType = itemType;
 	}
+
+
+	
 	
 }

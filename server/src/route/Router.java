@@ -2,19 +2,23 @@ package route;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.User;
+import model_serv.User;
 import service.ApiService;
 import service.GameService;
 import service.LoginService;
-import utils.Message;
+import utils_serv.Message;
 
 public class Router {
-    
-    public static Message route(ApiService apiService, Message message){
+
+    public static Message route(ApiService apiService, Message message) {
         Message toreturn = new Message();
         switch (message.getAction()) {
             case "login":
                 return toreturn = LoginService.login(apiService, message);
+            case "turn":
+                return toreturn = GameService.turn(message);
+            case "updateTurn":
+                return toreturn = GameService.updateTurn(message);
             case "saveScore":
                 return toreturn = GameService.saveScore(apiService, message);
             case "noActionProvided":

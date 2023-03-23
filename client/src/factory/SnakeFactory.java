@@ -1,7 +1,5 @@
 package factory;
 
-import java.util.ArrayList;
-
 import agent.Snake;
 import strategy.StrategyAdvanced;
 import strategy.StrategyHuman;
@@ -10,11 +8,9 @@ import utils.FeaturesSnake;
 import utils.Position;
 
 
-public class SnakeFactory  {
+public class SnakeFactory {
 
-	static int id = 0;
-	
-
+	int id = 0;
 	
 	public Snake createSnake(FeaturesSnake featuresSnake, String levelAI) {
 		

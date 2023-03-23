@@ -1,5 +1,7 @@
 package utils;
 
+import utils.ItemType;
+
 public class FeaturesItem {
 
 	

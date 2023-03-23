@@ -2,24 +2,22 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.User;
-import utils.Message;
+import utils_serv.Message;
 
-public class LoginService {
+public class LoginService extends AbstractService{
     
     public static Message login(ApiService apiService, Message data){
         String result = apiService.post("/login", "{ \"email\": \"" + data.getUser().getEmail() + "\", \"password\":\"" + data.getUser().getPassword() + "\"}");
         Message message = new Message();
         try {
-            ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             message = mapper.readValue(result, Message.class);
+            message.setStatusCode(200);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            message.setStatusCode(400);
+            message.setMessage("Erreur des données fournies");
         }
-        message.setStatusCode(200);
         return message;
     }
 
