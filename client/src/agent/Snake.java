@@ -175,21 +175,26 @@ public class Snake {
 	}
 
 	public void setSkin(String skin) {
-		switch (skin) {
-			case "snake_pink.png":
-				this.setColorSnake(ColorSnake.Pink);
-				break;
-			case "snake_drunk.png":
-				this.setColorSnake(ColorSnake.Drunk);
-				break;
-			case "snake_marge.png":
-				this.setColorSnake(ColorSnake.Marge);
-				break;
-			case "snake_konoha.png":
-				this.setColorSnake(ColorSnake.Konoha);
-				break;
-			default:
-				this.setColorSnake(ColorSnake.Green);
+		if(skin == null){
+			this.setColorSnake(ColorSnake.Green);
+		}
+		else{
+			switch (skin) {
+				case "snake_pink.png":
+					this.setColorSnake(ColorSnake.Pink);
+					break;
+				case "snake_drunk.png":
+					this.setColorSnake(ColorSnake.Drunk);
+					break;
+				case "snake_marge.png":
+					this.setColorSnake(ColorSnake.Marge);
+					break;
+				case "snake_konoha.png":
+					this.setColorSnake(ColorSnake.Konoha);
+					break;
+				default:
+					this.setColorSnake(ColorSnake.Green);
+			}
 		}
 	}
 
