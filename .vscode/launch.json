@@ -9,7 +9,7 @@
             "name": "Client",
             "request": "launch",
             "mainClass": "Test",
-            "projectName": "snake_client_server_3e3f8804",
+            "projectName": "snake_client_server_cbca38c3",
             "cwd": "${workspaceFolder}/client/src"
         },
         {
@@ -17,7 +17,7 @@
             "name": "Server",
             "request": "launch",
             "mainClass": "Server",
-            "projectName": "snake_client_server_3e3f8804",
+            "projectName": "snake_client_server_cbca38c3",
             "cwd": "${workspaceFolder}/server/src"
         }
     ],
