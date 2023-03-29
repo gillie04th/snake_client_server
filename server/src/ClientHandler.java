@@ -44,7 +44,6 @@ public class ClientHandler extends Thread {
                 }
 
                 if (received.getAction().equals("logout")) {
-                    // TODO : Utilisation d'un token fourni pour chaque client pour l'identifier auprès de l'api une fois connecté
                     System.out.println("Le client " + this.socket + " demande la fermeture de la connexion");
                     System.out.println("Fermeture de la connexion sur le server");
                     this.socket.close();
