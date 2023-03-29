@@ -140,6 +140,13 @@ public class Message {
         this.items = items;
     }
 
+    public int getScore(){
+        if(snake!=null){
+            return snake.getSize();
+        }
+        return 0;
+    }
+
     public String toJson(){
         try {
             return new ObjectMapper().writeValueAsString(this);
