@@ -225,6 +225,7 @@ public class SnakeGame extends Game {
 		message.setTime(time);
 		message.setMessage(endStatus);
 		message.setTimestamp(gameTimestamp);
+		message.setSnake(snakes.get(0));
 
 		Message res = sendCommand(message);
 		if (res.getStatusCode() == 200) {
