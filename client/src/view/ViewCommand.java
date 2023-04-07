@@ -2,6 +2,7 @@ package view;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.NumberFormatter;
 
 import controller.AbstractController;
 import model.Game;
@@ -9,6 +10,7 @@ import model.Game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.Observer;
 import java.util.Observable;
 
@@ -112,6 +114,20 @@ public class ViewCommand implements Observer {
 			}
 		});
 
+		SpinnerModel model = new SpinnerNumberModel(
+			100, //valeur initiale
+			0, //valeur minimum
+			10000000, //valeur maximum
+			10 //pas
+		); 
+		JSpinner sp = new JSpinner(model);
+
+		sp.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent evenement) {
+				JSpinner source = (JSpinner)evenement.getSource();
+				controller.setMaxTurn((int) source.getValue());
+			}
+		});
 
 		jFrame.setLayout(new GridLayout(2,1));
 
@@ -125,9 +141,10 @@ public class ViewCommand implements Observer {
 		jFrame.add(haut);
 
 		JPanel bas = new JPanel();
-		bas.setLayout(new GridLayout(1,2));
+		bas.setLayout(new GridLayout(1,3));
 
 		bas.add(j);
+		bas.add(sp);
 
 		jtext = new JLabel("Tour : ",JLabel.CENTER);
 
