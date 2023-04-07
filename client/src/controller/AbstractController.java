@@ -27,5 +27,9 @@ public abstract class AbstractController {
 		long time = (long) (1000/speed);
 		this.game.setTime(time);
 	}
+
+	public void setMaxTurn(int nbTurn){
+		this.game.setMaxTurn(nbTurn);
+	}
 	
 }

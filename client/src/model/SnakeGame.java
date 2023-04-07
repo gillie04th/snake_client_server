@@ -80,6 +80,10 @@ public class SnakeGame extends Game {
 			items.add(new Item(featuresItem.getX(), featuresItem.getY(), featuresItem.getItemType()));
 		}
 
+		if(this.user != null){
+			setUserSkin();
+		}
+
 		this.gameTimestamp = LocalDateTime.now().toString();
 	}
 
@@ -192,11 +196,15 @@ public class SnakeGame extends Game {
 		if (res.getStatusCode() == 200) {
 			this.user = res.getUser();
 			this.user.setLogged(true);
-			snakes.get(0).setSkin(this.user.getSkin());
-			notifyObservers();
+			setUserSkin();
 			return true;
 		} else
 			return false;
+	}
+
+	public void setUserSkin(){
+		snakes.get(0).setSkin(this.user.getSkin());
+		notifyObservers();
 	}
 
 	public boolean isUserLogged() {
@@ -225,7 +233,9 @@ public class SnakeGame extends Game {
 		message.setTime(time);
 		message.setMessage(endStatus);
 		message.setTimestamp(gameTimestamp);
-		message.setSnake(snakes.get(0));
+		if(snakes.size() > 0){
+			message.setSnake(snakes.get(0));
+		}
 
 		Message res = sendCommand(message);
 		if (res.getStatusCode() == 200) {

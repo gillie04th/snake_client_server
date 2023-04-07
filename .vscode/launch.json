@@ -6,10 +6,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "snake_client_server_3e3f8804"
+        },
+        {
+            "type": "java",
             "name": "Client",
             "request": "launch",
             "mainClass": "Test",
-            "projectName": "snake_client_server_393df914",
+            "projectName": "snake_client_server_3e3f8804",
             "cwd": "${workspaceFolder}/client/src"
         },
         {
@@ -17,7 +24,7 @@
             "name": "Server",
             "request": "launch",
             "mainClass": "Server",
-            "projectName": "snake_client_server_393df914",
+            "projectName": "snake_client_server_3e3f8804",
             "cwd": "${workspaceFolder}/server/src"
         }
     ],

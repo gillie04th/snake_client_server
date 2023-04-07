@@ -164,4 +164,8 @@ public abstract class Game extends Observable implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	public void setMaxTurn(int nbTurn){
+		this.maxTurn = nbTurn;
+	}
 }
